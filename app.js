@@ -15,11 +15,10 @@ app.post('/webhook', (req, res) => {
 })
 app.listen(port)
 function reply(reply_token) {
-    let access_token = 'uQSjiQSouZJzJnuaGgboNEz0okjz27cFqNKu2gCZyMw7oPrDUc9RaMHjxFezVwnLhA8spYgu6JnbKaD19df5wOHIBVaj+e+nkg2wI+jyx8bvolC05MCkvS3F7aGqfOr6/Jzd3dJ+tsEdbbIjrxBsuwdB04t89/1O/w1cDnyilFU='
 
     let headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+{access_token}
+        'Authorization': 'Bearer uQSjiQSouZJzJnuaGgboNEz0okjz27cFqNKu2gCZyMw7oPrDUc9RaMHjxFezVwnLhA8spYgu6JnbKaD19df5wOHIBVaj+e+nkg2wI+jyx8bvolC05MCkvS3F7aGqfOr6/Jzd3dJ+tsEdbbIjrxBsuwdB04t89/1O/w1cDnyilFU='
     }
     let body = JSON.stringify({
         replyToken: reply_token,
