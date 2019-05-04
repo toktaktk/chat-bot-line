@@ -1,16 +1,42 @@
-const { LineBot } = require('bottender');
 
-const bot = new LineBot({
-  channelSecret: 'dc9d4e994b325bd5bdddd2e4db7a0793',
-  accessToken: 'uQSjiQSouZJzJnuaGgboNEz0okjz27cFqNKu2gCZyMw7oPrDUc9RaMHjxFezVwnLhA8spYgu6JnbKaD19df5wOHIBVaj+e+nkg2wI+jyx8bvolC05MCkvS3F7aGqfOr6/Jzd3dJ+tsEdbbIjrxBsuwdB04t89/1O/w1cDnyilFU=',
-});
+// Reply with two static messages
 
-bot.onEvent(async context => {
-    if (context.event.isFollow) {
-      await context.sendText('Hello, welcome to this bot!');
-    } else if (context.event.isText && context.event.text === 'How are you?') {
-      await context.sendText('I am fine.');
-    } else {
-      await context.sendText('I do not understand.');
+const express = require('express')
+const bodyParser = require('body-parser')
+const request = require('request')
+const app = express()
+const port = process.env.PORT || 4000
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.post('/webhook', (req, res) => {
+    let reply_token = req.body.events[0].replyToken
+    reply(reply_token)
+    res.sendStatus(200)
+})
+app.listen(port)
+
+function reply(reply_token) {
+
+    let headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer uQSjiQSouZJzJnuaGgboNEz0okjz27cFqNKu2gCZyMw7oPrDUc9RaMHjxFezVwnLhA8spYgu6JnbKaD19df5wOHIBVaj+e+nkg2wI+jyx8bvolC05MCkvS3F7aGqfOr6/Jzd3dJ+tsEdbbIjrxBsuwdB04t89/1O/w1cDnyilFU='
     }
-  });
+    let body = JSON.stringify({
+        replyToken: reply_token,
+        messages: [{
+            type: 'text',
+            text: 'Hello'
+        },
+        {
+            type: 'text',
+            text: 'How are you?'
+        }]
+    })
+    request.post({
+        url: 'https://api.line.me/v2/bot/message/reply',
+        headers: headers,
+        body: body
+    }, (err, res, body) => {
+        console.log('status = ' + res.statusCode);
+    });
+}
